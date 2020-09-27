@@ -15,7 +15,7 @@ public:
     void add_last(T data); 
     void print(); 
     bool is_empty(); 
-    //TODO: delete_data to work, make delete_at, get_data, update_at, update_data
+    //TODO:get_data, update_at, update_data
     bool delete_data(T data); 
     bool delete_at(int index); 
     T& get_data(int index); 
@@ -71,27 +71,33 @@ bool LinkedList<T>::is_empty(){
 template<class T> 
 bool LinkedList<T>::delete_data(T data){
     if(!is_empty()){
-        Node<T> *aux = head->next; 
         if(head->data == data){
+            Node<T> *temp = head->next; 
             delete head; 
-            head = new Node<T>(aux->data,aux->next); 
+            if(temp != NULL){
+                head = new Node<T>(temp->data, temp->next); 
+            }
+            else{
+                head = NULL;
+            }
             size--; 
-            delete aux; 
+            delete temp; 
             return true; 
         }
         else{
-            while(aux != NULL){
-                if(aux->next->next->data == data){
-                    if(aux->next->next->next != NULL){
-                        delete aux->next;
-                        aux->next = new Node<T>(aux->next->next->data, aux->next->next->next);
+            Node<T> *aux = head; 
+            while(aux->next != NULL){
+                if(aux->next->data == data){
+                    if(aux->next->next != NULL){
+                        Node<T> *temp = aux->next->next; 
+                        delete aux->next; 
+                        aux->next = new Node<T>(temp->data,temp->next); 
                         size--; 
-                        return true; 
+                        return true;
                     }
-                    if(aux->next->next->next == NULL){
-                        delete aux->next->next; 
-                        aux->next = new Node<T>(aux->next->data); 
-                        size--; 
+                    else{
+                        delete aux->next; 
+                        aux->next = NULL; 
                         return true; 
                     }
                 }
@@ -101,6 +107,50 @@ bool LinkedList<T>::delete_data(T data){
     }
     return false; 
 }
+
+template<class T> 
+bool LinkedList<T>::delete_at(int index){
+    if(!is_empty()){
+        int pos = 0; 
+        if(pos == index){
+            Node<T> *temp = head->next; 
+            delete head; 
+            if(temp != NULL){
+                head = new Node<T>(temp->data, temp->next); 
+            }
+            else{
+                head = NULL;
+            }
+            size--; 
+            delete temp; 
+            return true; 
+        }
+        else{
+            Node<T> *aux = head; 
+            while(aux->next != NULL){
+                if(pos+1 == index){
+                    if(aux->next->next != NULL){
+                        Node<T> *temp = aux->next->next; 
+                        delete aux->next; 
+                        aux->next = new Node<T>(temp->data,temp->next); 
+                        size--; 
+                        return true;
+                    }
+                    else{
+                        delete aux->next; 
+                        aux->next = NULL; 
+                        return true; 
+                    }
+                }
+                pos++; 
+                aux = aux->next; 
+            }
+        }
+    }
+    return false; 
+}
+
+
 
 
 #endif //LinkedList_h

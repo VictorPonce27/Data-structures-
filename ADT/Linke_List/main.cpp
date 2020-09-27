@@ -11,7 +11,7 @@ int main(){
     list.add_first(0); 
     list.add_last(3); 
     list.print(); 
-    if(list.delete_data(3) == true){
+    if(list.delete_at(3) == true){
         cout<<"Deleted"<<endl;
     } 
     list.print(); 
