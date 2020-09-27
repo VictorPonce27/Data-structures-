@@ -10,18 +10,18 @@ private:
     Node<T>* head; 
 public:
     LinkedList();
-    LinkedList(int size, Node<T>* head); 
+    LinkedList(initializer_list<T> e); 
     void add_first(T data); 
     void add_last(T data); 
-    void print(); 
-    bool is_empty(); 
-    //TODO:get_data, update_at, update_data
     bool delete_data(T data); 
     bool delete_at(int index); 
+    bool is_empty(); 
     T& get_data(int index); 
-    void update_at(T data, int index); 
+    void update_at(int index, T newData); 
     void update_data(T data, T newData); 
-
+    int find_data(T data); 
+    T& operator[](int index); 
+    void print(); 
 
 };
 
@@ -30,6 +30,26 @@ LinkedList<T>::LinkedList(){
     size = 0; 
     head = NULL; 
 }
+
+template<class T> 
+LinkedList<T>::LinkedList(initializer_list<T> e){
+    size = 0; 
+    for(auto i:e){
+        if(is_empty()){
+        head = new Node<T>(i); 
+        size++;  
+        }
+        else{
+            Node<T> *aux = head; 
+            while(aux->next!= NULL){
+                aux = aux->next; 
+            }
+            aux->next = new Node<T>(i); 
+            size++; 
+        }
+    }
+}
+
 
 template<class T>
 void LinkedList<T>::add_first(T data){
@@ -65,7 +85,7 @@ void LinkedList<T>::print(){
 
 template<class T> 
 bool LinkedList<T>::is_empty(){
-    return head == NULL; 
+    return size == 0; 
 }
 
 template<class T> 
@@ -150,6 +170,82 @@ bool LinkedList<T>::delete_at(int index){
     return false; 
 }
 
+template<class T> 
+T& LinkedList<T>::get_data(int index){
+    Node<T> *aux = head; 
+    int pos = 0; 
+    while(aux != NULL){
+        if(pos == index){
+            return aux->data; 
+        }
+        aux = aux->next; 
+        pos++; 
+    }
+    throw invalid_argument("value not found");
+}
+
+template<class T> 
+void LinkedList<T>::update_data(T data, T newData){
+    Node<T> *aux = head; 
+    bool found = false; 
+    while (aux!= NULL){
+        if(aux->data == data){
+            aux->data = newData;
+            found = true; 
+        } 
+        aux = aux->next; 
+    }
+    if(found == false){
+        throw invalid_argument("value not found");    
+    }
+
+}
+
+template<class T> 
+void LinkedList<T>::update_at(int index, T newData){
+    Node<T> *aux = head; 
+    int pos = 0;
+    bool found = false; 
+    while (aux!= NULL){
+        if(pos == index){
+            aux->data = newData;
+            found = true; 
+        }
+        pos++; 
+        aux = aux->next; 
+    }
+    if(found == false){
+        throw invalid_argument("value not found");    
+    }
+}
+
+template<class T> 
+int LinkedList<T>::find_data(T data){
+    Node<T> *aux = head; 
+    int pos = 0; 
+    while(aux!= NULL){
+        if(aux->data == data){
+            return pos;
+        }
+        pos++; 
+        aux = aux->next; 
+    }
+    throw invalid_argument("value not found"); 
+}
+
+template<class T> 
+T& LinkedList<T>::operator[](int index){
+    Node<T> *aux = head; 
+    int pos = 0; 
+    while(aux != NULL){
+        if(pos == index){
+            return aux->data; 
+        }
+        pos++; 
+        aux = aux->next; 
+    }
+    throw invalid_argument("index was not found"); 
+}
 
 
 
