@@ -21,9 +21,11 @@ public:
     void update_data(T data, T newData); 
     //TODO: sort, duplicate, remove_duplicates, operator =, reverse;
     void insert_at(int index, T newData); 
-    void clear(); 
-    void sort(); 
+    void clear();
+    void m_sort(LinkedList<T> &list, int low, int mid, int high);
+    void sort(LinkedList<T> &list, int low, int high);
     int find_data(T data); 
+    int get_size(); 
     T& operator[](int index); 
     void print(); 
 
@@ -91,6 +93,12 @@ template<class T>
 bool LinkedList<T>::is_empty(){
     return size == 0; 
 }
+
+template<class T>
+int LinkedList<T>::get_size(){
+    return size; 
+}
+
 
 template<class T> 
 bool LinkedList<T>::delete_data(T data){
@@ -293,6 +301,62 @@ void LinkedList<T>::clear(){
         size = 0; 
     }
     throw runtime_error("list is empty"); 
+}
+
+template<class T> 
+void LinkedList<T>::m_sort(T &list, int low, int mid,int high ){
+    LinkedList<T> L;
+    LinkedList<T> R;
+    int i=0;
+    int j=0;
+
+    int pos = low;
+
+    int n = mid-low +1;
+    int m = high- mid;
+
+    for(int i=0;i<n;i++){
+        L = {list[low+i]};
+    }
+    for(int j=0;j<m;j++){
+        R = {list[mid+1+j]};
+    }
+
+    while(i<n && j<m){
+
+        if(L[i] <= R[j]){
+            list[pos] = L[i];
+            i++;
+        }
+        else{
+            list[pos] = R[j];
+            j++;
+        }
+        pos++;
+    }
+    while(i<n){
+        list[pos] = L[i];
+        i++;
+        pos++;
+    }
+    while(j<m){
+        list[pos] = R[j];
+        j++;
+        pos++;
+    }
+
+}
+
+template <class T>
+void sort(T &list, int low, int high){
+    if(low<high){
+        int mid = (low+high)/2;
+
+        sort(list, low, mid);
+        sort(list, mid + 1, high);
+        m_sort(list,low,mid,high);
+
+    }
 }
 
 #endif //LinkedList_h
