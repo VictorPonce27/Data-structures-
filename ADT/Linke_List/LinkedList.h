@@ -19,6 +19,10 @@ public:
     T& get_data(int index); 
     void update_at(int index, T newData); 
     void update_data(T data, T newData); 
+    //TODO: sort, duplicate, remove_duplicates, operator =, reverse;
+    void insert_at(int index, T newData); 
+    void clear(); 
+    void sort(); 
     int find_data(T data); 
     T& operator[](int index); 
     void print(); 
@@ -95,7 +99,7 @@ bool LinkedList<T>::delete_data(T data){
             Node<T> *temp = head->next; 
             delete head; 
             if(temp != NULL){
-                head = new Node<T>(temp->data, temp->next); 
+                head->data = new Node<T>(temp->data, temp->next); 
             }
             else{
                 head = NULL;
@@ -170,6 +174,7 @@ bool LinkedList<T>::delete_at(int index){
     return false; 
 }
 
+//TODO: try to facilitate the search values (if statement with the size of the lined list)
 template<class T> 
 T& LinkedList<T>::get_data(int index){
     Node<T> *aux = head; 
@@ -181,7 +186,7 @@ T& LinkedList<T>::get_data(int index){
         aux = aux->next; 
         pos++; 
     }
-    throw invalid_argument("value not found");
+    throw out_of_range("value not found");
 }
 
 template<class T> 
@@ -196,7 +201,7 @@ void LinkedList<T>::update_data(T data, T newData){
         aux = aux->next; 
     }
     if(found == false){
-        throw invalid_argument("value not found");    
+        throw runtime_error("value not found");    
     }
 
 }
@@ -215,7 +220,7 @@ void LinkedList<T>::update_at(int index, T newData){
         aux = aux->next; 
     }
     if(found == false){
-        throw invalid_argument("value not found");    
+        throw runtime_error("value not found");    
     }
 }
 
@@ -230,7 +235,7 @@ int LinkedList<T>::find_data(T data){
         pos++; 
         aux = aux->next; 
     }
-    throw invalid_argument("value not found"); 
+    throw runtime_error("value not found"); 
 }
 
 template<class T> 
@@ -244,9 +249,50 @@ T& LinkedList<T>::operator[](int index){
         pos++; 
         aux = aux->next; 
     }
-    throw invalid_argument("index was not found"); 
+    throw out_of_range("index was not found"); 
 }
 
+template<class T> 
+void LinkedList<T>::insert_at(int index, T newData){
+    if(index >= 0 || index <size){
+        int pos = 0; 
+        bool found = false; 
+        if(pos == index){
+            head = new Node<T>(newData, head); 
+            size++; 
+            found = true;  
+        }
+        else{
+            Node<T> *aux = head; 
+            while(aux->next != NULL){
+                if(pos+1 == index){
+                    aux->next = new Node<T>(newData, aux->next);
+                    size++;
+                    found = true;
+                }
+                pos++; 
+                aux = aux->next; 
+            }
+        }
+        if(found == false){
+            throw out_of_range("out of range"); 
+        }
+    }
+}
 
+template<class T>
+void LinkedList<T>::clear(){
+    if(!is_empty()){
+        Node<T> *aux = head->next; 
+        while(head->next!= NULL){
+            head->next = aux->next; 
+            delete aux; 
+            aux = head->next;
+        }
+        head = NULL; 
+        size = 0; 
+    }
+    throw runtime_error("list is empty"); 
+}
 
 #endif //LinkedList_h
