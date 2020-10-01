@@ -19,7 +19,6 @@ public:
     T& get_data(int index); 
     void update_at(int index, T newData); 
     void update_data(T data, T newData); 
-    //TODO: duplicate, remove_duplicates, operator =, reverse;
     int find_data(T data); 
     int get_size(); 
     T& operator[](int index); 
@@ -29,6 +28,9 @@ public:
     void m_sort(LinkedList<T> &list, int low, int mid, int high);
     void sort(LinkedList<T> &list, int low, int high);
     void duplicate(); 
+    void remove_duplicates(); 
+    void reverse(); 
+    void operator=(LinkedList<T> *e); 
 };
 
 template<class T>
@@ -281,8 +283,8 @@ void LinkedList<T>::insert_at(int index, T newData){
                 aux = aux->next; 
             }
         }
-            throw out_of_range("out of range"); 
-        }
+        throw out_of_range("out of range"); 
+    }
 }
 
 template<class T>
@@ -378,7 +380,46 @@ void LinkedList<T>::duplicate(){
     throw runtime_error("list is empty"); 
 }
 
+template<class T> 
+void LinkedList<T>::remove_duplicates(){
+    if(!is_empty()){
+        Node<T> *temp1 = head;; 
+        while(temp1 != NULL && temp1 -> next != NULL){
+            Node<T> *temp2 = temp1;
+            while (temp2->next != NULL){
+                if(temp1->data == temp2->next->data){
+                    Node<T> *temp3 = temp2->next; 
+                    temp2->next = temp2->next->next; 
+                    delete temp3; 
+                }  
+                else{
+                    temp2 = temp2->next; 
+                }
 
+            }
+            temp1 = temp1->next;    
+        }
+        return; 
+    }
+    throw runtime_error("don't know");
+}
 
+template<class T> 
+void LinkedList<T>::reverse(){
+   LinkedList<T> list;
+   for(int i=0; i<size; i++){
+       list.add_first(head->data); 
+       head = head->next; 
+   }
+   *this = list; 
+}
+
+template< class T>
+void LinkedList<T>::operator=(LinkedList<T> *e){
+    clear(); 
+    for(int i = 0; i<e->size(); i++){
+        add_last(e[i]); 
+    }
+}
 
 #endif //LinkedList_h
