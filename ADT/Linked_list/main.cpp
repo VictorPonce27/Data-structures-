@@ -8,7 +8,7 @@ int main(){
     LinkedList<int> list2;
     list = {51, 28, 21, 48, 25};
     list.print();
-    list.sort(list, 0, list.get_size() - 1);
+    list.sort(); 
     list.print();
     list.duplicate();
     list.print();

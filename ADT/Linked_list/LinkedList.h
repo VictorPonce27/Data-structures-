@@ -26,7 +26,8 @@ public:
     void insert_at(int index, T newData); 
     void clear();
     void m_sort(LinkedList<T> &list, int low, int mid, int high);
-    void sort(LinkedList<T> &list, int low, int high);
+    void sorti(LinkedList<T> &list, int low, int high);
+    void sort(); 
     void duplicate(); 
     void remove_duplicates(); 
     void reverse(); 
@@ -42,6 +43,7 @@ LinkedList<T>::LinkedList(){
 template<class T> 
 LinkedList<T>::LinkedList(initializer_list<T> e){
     size = 0; 
+    head = NULL; 
     for(auto i:e){
         if(is_empty()){
         head = new Node<T>(i); 
@@ -348,16 +350,22 @@ void LinkedList<T>::m_sort(LinkedList<T> &list, int low, int mid,int high ){
 }
 
 template <class T>
-void LinkedList<T>::sort(LinkedList<T> &list, int low, int high){
+void LinkedList<T>::sorti(LinkedList<T> &list, int low, int high){
     if(low<high){
         int mid = (low+high)/2;
 
-        sort(list, low, mid);
-        sort(list, mid + 1, high);
+        sorti(list, low, mid);
+        sorti(list, mid + 1, high);
         m_sort(list,low,mid,high);
 
     }
 }
+
+template<class T> 
+void LinkedList<T>::sort(){
+    sorti(*this, 0,size-1); 
+}
+
 
 template<class T> 
 void LinkedList<T>::duplicate(){
