@@ -82,14 +82,14 @@ void LinkedList<T>::add_last(T data){
             aux = aux->next; 
         }
         aux -> next = new Node<T>(data); 
-        size++; 
+        size++;
     }
 }   
 
 template<class T> 
 void LinkedList<T>::print(){
     Node<T>* aux = head; 
-   while(aux != NULL){
+    while(aux != NULL){
        cout<< aux->data <<" ";
        aux = aux->next;  
    }
@@ -137,6 +137,7 @@ bool LinkedList<T>::delete_data(T data){
                     else{
                         delete aux->next; 
                         aux->next = NULL; 
+                        size--; 
                         return true; 
                     }
                 }
@@ -155,13 +156,12 @@ bool LinkedList<T>::delete_at(int index){
             Node<T> *temp = head->next; 
             delete head; 
             if(temp != NULL){
-                head = new Node<T>(temp->data, temp->next); 
+                head = temp; 
             }
             else{
                 head = NULL;
             }
             size--; 
-            delete temp; 
             return true; 
         }
         else{
@@ -171,13 +171,15 @@ bool LinkedList<T>::delete_at(int index){
                     if(aux->next->next != NULL){
                         Node<T> *temp = aux->next->next; 
                         delete aux->next; 
-                        aux->next = new Node<T>(temp->data,temp->next); 
+                        aux->next = temp; 
+                        // new Node<T>(temp->data,temp->next); 
                         size--; 
                         return true;
                     }
                     else{
                         delete aux->next; 
                         aux->next = NULL; 
+                        size--; 
                         return true; 
                     }
                 }
@@ -267,7 +269,6 @@ template<class T>
 void LinkedList<T>::insert_at(int index, T newData){
     if(index >= 0 || index <size){
         int pos = 0; 
-        bool found = false; 
         if(pos == index){
             head = new Node<T>(newData, head); 
             size++; 
@@ -298,6 +299,7 @@ void LinkedList<T>::clear(){
             delete aux; 
             aux = head->next;
         }
+        delete head; 
         head = NULL; 
         size = 0; 
         return; 

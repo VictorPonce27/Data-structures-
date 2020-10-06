@@ -60,9 +60,11 @@ void Stack<T>::push(T data){
 template<class T>
 T Stack<T>::pop(){
     if(size != 0){
-        Node<T> *aux = top; 
-        // cout<<"element: "<<top->data<<endl;
-        top = top->next; 
+        Node<T> *aux = top->next; 
+        T temp = top->data;  
+        delete top; 
+        top = aux; 
+        size--; 
         return aux->data; 
     }
     throw runtime_error("list is empty");
@@ -75,18 +77,16 @@ int Stack<T>::get_size(){
 
 template<class T> 
 void Stack<T>::clear(){
-    if(size != 0){
-        Node<T> *aux = top->next; 
-        while(top->next != NULL){
-            top ->next = aux->next; 
-            delete aux; 
-            aux = top->next; 
-        }
-        top = NULL; 
-        size = 0; 
-        return; 
-    } 
-    throw runtime_error("list is empty"); 
+    Node<T> *aux = top->next; 
+    while(top->next != NULL){
+        top ->next = aux->next; 
+        delete aux; 
+        aux = top->next; 
+    }
+    top = NULL; 
+    size = 0; 
+    return; 
+
 }
 
 template<class T> 
