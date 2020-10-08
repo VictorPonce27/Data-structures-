@@ -2,9 +2,6 @@
 //  By victor Ponce A00827302
 //
 
-//TODO: Implement the Quee in the Merge Sort
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -110,7 +107,6 @@ void validateHour(int hour){
         }
     }
 
-
 }
 
 
@@ -134,8 +130,8 @@ int main(){
     int searchHour1;
     int searchHour2;
 
-    ifstream inFile("/mnt/c/Users/Victor Ponce/Programming/Week6/Act2.3/Double_Linked_List/bitacora.txt");
-
+    ifstream inFile("bitacora.txt");
+    //adding the info to the doubly linked list
     if(inFile.is_open()){
         while(getline(inFile,line)){
             stringstream ss(line);
@@ -158,10 +154,10 @@ int main(){
             infoList.add_last(var);
         }
     }
-
-
     infoList.sort();
-    infoList.print();
+    //output file
+    infoList.Print(); 
+    //asks for the range that you wan to see in the console; 
     while(!done){
         int middle = 0;
 
@@ -189,7 +185,7 @@ int main(){
 
         date1 = (searchMonth1 * 100000000) + (searchDay1 * 1000000) + (searchHour1 * 10000);
         date2 = (searchMonth2 * 100000000) + (searchDay2 * 1000000) + (searchHour2 * 10000);
-
+        //verefies that start search date is less than end search date
         if(date1 < date2){
             start = binaryS(infoList, date1);
             end = binaryE(infoList,date2);
@@ -198,32 +194,27 @@ int main(){
             end = binaryS(infoList, date1);
             start = binaryE(infoList, date2);
         }
+            int count = 0;
+            char temp = 'x';
 
+            for(int i = start; i<=end;i++){
+                if(count >= 20){
+                    cout<<"To keep printing press enter, to stop type x "<<endl;
+                    cin.get(temp);
+                    if(temp == '\n'){
+                        count = 0;
+                    }
+                    else{
+                        i = end;
+                    }
 
-        int count = 0;
-        char temp = 'x';
-
-        for(int i = start; i<=end;i++){
-            if(count >= 20){
-                cout<<"To keep printing press enter, to stop type x "<<endl;
-                cin.get(temp);
-                if(temp == '\n'){
-                    count = 0;
                 }
-                else{
-                    i = end;
+                if(i<=end){
+                infoList[i].print();
                 }
+                count++;
+            }
 
-            }
-            if(i<=end){
-            infoList[i].print();
-            }
-            count++;
         }
-
-
-    }
-
-
-    return 0;
+        return 0;
 }

@@ -21,15 +21,16 @@ public:
     T get_data(int index);
     void update_at(int index, T newData);
     void print();
+    void Print(); 
     void print_backwards();
     void clear();
     int get_size();
-    void m_sort(int low, int mid, int high);
-    void sorti(int low, int high);
+    void m_sort(int low,int mid, int high, Node<T> *nLeft, Node<T> *nMid, Node<T> *nRight);
+    void sorti(int low, int high, Node<T> *nleft, Node<T> *nright);
     void sort();
     void operator=(Double_Linked_List<T> *e);
     void operator=(T *e);
-    // void operator=(Quee<T>*e);
+    Node<T>* search(Node<T> *temp, int index);
 };
 template<class T>
 Double_Linked_List<T>::Double_Linked_List(){
@@ -93,13 +94,27 @@ bool Double_Linked_List<T>::is_empty(){
 }
 
 template<class T>
-void Double_Linked_List<T>::print(){
+void Double_Linked_List<T>::Print(){
     Node<T> *aux = head;
+    ofstream outfile; 
+    outfile.open("OutPutFile.txt");
+    while(aux != NULL){
+        outfile << aux->data.Print();
+        outfile <<"\n";
+        aux = aux->next;
+    }
+    cout << endl;
+    outfile.close();
+}
+
+template<class T>
+void Double_Linked_List<T>::print(){
+    Node<T> *aux = head;;
     while(aux != NULL){
         aux->data.print();
         aux = aux->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 template<class T>
@@ -357,61 +372,74 @@ T Double_Linked_List<T>::get_data(int index){
 
 
 template <class T>
-void Double_Linked_List<T>::m_sort(int low,int mid, int high ){
+void Double_Linked_List<T>::m_sort(int low,int mid, int high, Node<T> *nLeft, Node<T> *nMid, Node<T> *nRight){
     Queue<T> L;
     Queue<T> R;
-    int i=0;
-    int j=0;
-
-    int pos = low;
-
+    int i = 0;
+    int j = 0;
     int n = mid-low +1;
     int m = high- mid;
 
+    Node<T> *tempPos = nLeft;
+
     for(int i=0;i<n;i++){
-        L.enqueue(get_data(low+1));
+        L.enqueue(nLeft->data);
+        nLeft = nLeft->next;
     }
+
     for(int j=0;j<m;j++){
-        R.enqueue(get_data(mid+1+j));
+        R.enqueue(nMid->next->data);
+        nMid = nMid->next;
     }
 
-    while(i<n && j<m){
-
-        if(L.front() <= R.front()){
-            update_at(pos,L.dequeue());
+    while (i < n && j < m) {
+        if (L.front()->data <= R.front()->data) {
+            tempPos->data = L.dequeue();
             i++;
         }
-        else{
-            update_at(pos,R.dequeue());
+        else {
+            tempPos->data = R.dequeue();
             j++;
         }
-        pos++;
+        tempPos = tempPos->next;
     }
-    while(i<n){
-        update_at(pos,L.dequeue());
+
+    while (i < n) {
+        tempPos->data = L.dequeue();
+        tempPos = tempPos->next;
         i++;
-        pos++;
     }
-    while(j<m){
-        update_at(pos,R.dequeue());
+
+    while (j < m) {
+        tempPos->data = R.dequeue();
+        tempPos = tempPos->next;
         j++;
-        pos++;
     }
 
 }
 
 template <class T>
-void Double_Linked_List<T>::sorti(int low, int high ){
+void Double_Linked_List<T>::sorti(int low, int high, Node<T> *nLeft, Node<T> *nRight){
     if(low<high){
         int mid = (low+high)/2;
-        sorti(low,mid );
-        sorti(mid+1,high );
-        m_sort(low,mid,high );
-
+        Node<T> *nMid = search(nLeft, mid-low);
+        sorti(low,mid,nLeft, nMid);
+        sorti(mid+1,high, nMid->next, nRight);
+        m_sort(low,mid,high, nLeft, nMid, nRight);
     }
 }
 template<class T>
 void Double_Linked_List<T>::sort(){
-  sorti(0,size-1);
+  sorti(0,size-1,head,tail);
 }
+
+template <class T>
+Node<T>* Double_Linked_List<T>::search(Node<T> *temp, int index){
+    Node<T> *aux = temp;
+    for(int i=0; i<index; i++){
+        aux = aux->next;
+    }
+    return aux;
+}
+
 #endif //Double_Linked_list_h

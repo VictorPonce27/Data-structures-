@@ -20,7 +20,8 @@ private:
 public:
     datos(); 
     datos(string month,int monthNum ,int day, int hour,int min,int second,string ip,string fail);
-    void print(); 
+    void print();
+    string Print();
     string get_month(); 
     int get_numMonth(); 
     int get_day();
@@ -61,6 +62,13 @@ datos::datos(string month,int monthNum ,int day, int hour,int min,int second,str
 void datos::print(){
      cout<<month<<" "<<day<<" "<<hour<<":"<<min<<":"<<second<<" "<<ip<<" "<<fail<<endl;
 }
+
+string datos::Print(){
+    string temp; 
+     temp = month + " " + to_string(day) + " " + to_string(hour) + ":" + to_string(min) + ":" + to_string(second )+ " " + ip + " " + fail;
+     return temp; 
+}
+
 
 int datos::get_day(){
     return day;
